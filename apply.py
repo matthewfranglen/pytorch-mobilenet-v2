@@ -65,7 +65,7 @@ def main(
         for batch, _ in dataloader:
             batch = batch.to(device)
             output = model(batch)
-            print(output.cpu())
+            print(output.cpu().argmax().item())
 
 
 if __name__ == "__main__":
