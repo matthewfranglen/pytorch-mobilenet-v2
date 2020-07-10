@@ -43,7 +43,8 @@ class SingleImageDataset(datasets.VisionDataset):
 def main(
     file: Path = typer.Option(
         ..., exists=True, file_okay=True, dir_okay=False, readable=True
-    )
+    ),
+    cuda: bool = True,
 ):
     normalize = transforms.Normalize(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
@@ -58,12 +59,13 @@ def main(
         "matthewfranglen/pytorch-mobilenet-v2", "mobilenet_v2", pretrained=True
     ).eval()
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() and cuda else "cpu"
     model = model.to(device)
-    for batch, _ in dataloader:
-        batch = batch.to(device)
-        output = model(batch)
-        print(output.cpu())
+    with torch.no_grad():
+        for batch, _ in dataloader:
+            batch = batch.to(device)
+            output = model(batch)
+            print(output.cpu())
 
 
 if __name__ == "__main__":
