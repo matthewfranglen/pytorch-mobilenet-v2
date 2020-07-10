@@ -26,18 +26,18 @@ class SingleImageDataset(datasets.VisionDataset):
             transform=transform if transform else transforms.ToTensor(),
             target_transform=None,
         )
-        self.image = PIL.Image.open(image).load()
+        self.image = PIL.Image.open(image)
 
     def __len__(self) -> int:
         return 1
 
-    def __getitem__(self, index: int) -> Tuple[torch.Tensor, None]:
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, int]:
         img = self.image
 
         if self.transform is not None:
             img = self.transform(img)
 
-        return img, None
+        return img, 0
 
 
 def main(
@@ -49,7 +49,7 @@ def main(
         mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
     dataset = SingleImageDataset(
-        file, transform=transforms.Compose([normalize, transforms.ToTensor(),]),
+        file, transform=transforms.Compose([transforms.ToTensor(), normalize]),
     )
     dataloader: torch.utils.data.DataLoader = torch.utils.data.DataLoader(
         dataset, batch_size=1
