@@ -34,6 +34,14 @@ from MobileNetV2 import mobilenet_v2
 net = mobilenet_v2(pretrained=True)
 ```
 
+To use torch.hub, run
+
+```python
+import torch.hub
+
+model = torch.hub.load('matthewfranglen/pytorch-mobilenet-v2', 'mobilenet_v2', pretrained=True)
+```
+
 ## Data Pre-processing
 
 I used the following code for data pre-processing on ImageNet:
